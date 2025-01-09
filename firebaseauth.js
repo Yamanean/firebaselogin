@@ -1,17 +1,17 @@
 // Importa as funções necessárias do Firebase
+require("dotenv").config()
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 // Configurações do Firebase
 const firebaseConfig = {
-    apiKey: "",
-    authDomain: "",
-    projectId: "",
+    apiKey: process.env.apiKey,
+    authDomain: process.env.authDomain,
+    projectId: process.env.projectId,
     storageBucket: "",
-    messagingSenderId: "",
+    messagingSenderId: process.env.messagingSenderId,
     appId: "",
-    measurementId: ""
 };
 
 // Inicializa o Firebase
