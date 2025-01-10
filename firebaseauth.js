@@ -17,6 +17,24 @@ const firebaseConfig = {
 // Inicializa o Firebase
 const app = initializeApp(firebaseConfig);
 
+
+const auth = getAuth(app);
+auth.languagecode = 'pt-br'
+const provider = new GoogleAuthProvider();
+
+const googleSignIn = document.getElementById('googleSignIn');
+googleSignIn.addEventListener('click', (event) => {
+    event.preventDefault();
+})
+
+
+
+
+
+
+
+
+
 // Função para exibir mensagens temporárias na interface
 function showMessage(message, divId) {
     var messageDiv = document.getElementById(divId);
