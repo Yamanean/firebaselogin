@@ -9,9 +9,10 @@ const firebaseConfig = {
     apiKey: process.env.apiKey,
     authDomain: process.env.authDomain,
     projectId: process.env.projectId,
-    storageBucket: "",
+    storageBucket: process.env.storageBucket,
     messagingSenderId: process.env.messagingSenderId,
-    appId: "",
+    appId: process.env.appId,
+    measurementId: process.env.measurementId,
 };
 
 // Inicializa o Firebase
@@ -25,6 +26,16 @@ const provider = new GoogleAuthProvider();
 const googleSignIn = document.getElementById('googleSignIn');
 googleSignIn.addEventListener('click', (event) => {
     event.preventDefault();
+
+    signInWithPopup(auth, provider)
+    .then(result) => {
+
+
+        const user = result.user;
+        showMessage('Sucessuful Login with Google', 'signInMessage');
+        localStorage.setItem('LoggedInUserId', user.uid); 
+
+    }
 })
 
 
