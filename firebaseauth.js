@@ -1,5 +1,4 @@
 // Importa as funções necessárias do Firebase
-require("dotenv").config()
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -7,20 +6,19 @@ import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/10
 
 // Configurações do Firebase
 const firebaseConfig = {
-    apiKey: process.env.apiKey,
-    authDomain: process.env.authDomain,
-    projectId: process.env.projectId,
-    storageBucket: process.env.storageBucket,
-    messagingSenderId: process.env.messagingSenderId,
-    appId: process.env.appId,
-    measurementId: process.env.measurementId,
+    apiKey: "AIzaSyDyt9n8CVoFCwt7m2vLrIHJfLR1GfNBD6g",
+    authDomain: "eight-e6918.firebaseapp.com",
+    projectId: "eight-e6918",
+    storageBucket: "eight-e6918.firebasestorage.app",
+    messagingSenderId: "472440707108",
+    appId: "1:472440707108:web:70ac7b5bb437bb83a860b1",
+    measurementId: "G-63BJ2GHBH1",
 };
 
 // Inicializa o Firebase
 const app = initializeApp(firebaseConfig);
 
 
-auth.languagecode = 'pt-br'
 const provider = new GoogleAuthProvider();
 
 // Função para exibir mensagens temporárias na interface
@@ -46,6 +44,7 @@ signUp.addEventListener('click', (event) => {
     const lastName = document.getElementById('lName').value;
 
     const auth = getAuth(); // Configura o serviço de autenticação
+    auth.languagecode = 'pt-br';
     const db = getFirestore(); // Conecta ao Firestore
 
     // Cria uma conta com e-mail e senha
