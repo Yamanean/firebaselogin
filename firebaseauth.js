@@ -4,6 +4,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/fireba
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
+
 // Configurações do Firebase
 const firebaseConfig = {
     apiKey: process.env.apiKey,
@@ -35,10 +36,8 @@ googleSignIn.addEventListener('click', (event) => {
         showMessage('Sucessuful Login with Google', 'signInMessage');
         localStorage.setItem('LoggedInUserId', user.uid); 
 
-    }
+       };
 })
-
-
 
 
 
