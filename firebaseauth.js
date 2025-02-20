@@ -20,30 +20,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 
-const auth = getAuth(app);
 auth.languagecode = 'pt-br'
 const provider = new GoogleAuthProvider();
-
-const googleSignIn = document.getElementById('googleSignIn');
-googleSignIn.addEventListener('click', (event) => {
-    event.preventDefault();
-
-    signInWithPopup(auth, provider)
-    .then(result) => {
-
-
-        const user = result.user;
-        showMessage('Sucessuful Login with Google', 'signInMessage');
-        localStorage.setItem('LoggedInUserId', user.uid); 
-
-       };
-})
-
-
-
-
-
-
 
 // Função para exibir mensagens temporárias na interface
 function showMessage(message, divId) {
