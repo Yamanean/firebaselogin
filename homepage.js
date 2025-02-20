@@ -6,14 +6,13 @@ import { getFirestore, getDoc, doc } from "https://www.gstatic.com/firebasejs/10
 // Configuração do Firebase com as credenciais do projeto
 const firebaseConfig = {
     apiKey: "AIzaSyDyt9n8CVoFCwt7m2vLrIHJfLR1GfNBD6g",
-    authDomain:"eight-e6918.firebaseapp.com",
+    authDomain: "eight-e6918.firebaseapp.com",
     projectId: "eight-e6918",
     storageBucket: "eight-e6918.firebasestorage.app",
     messagingSenderId: "472440707108",
     appId: "1:472440707108:web:70ac7b5bb437bb83a860b1",
-    measurementId: "G-63BJ2GHBH1",
-
-};
+    measurementId: "G-63BJ2GHBH1"
+  };
 
 // Inicializa o Firebase
 const app = initializeApp(firebaseConfig);

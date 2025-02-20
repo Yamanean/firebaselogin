@@ -1,15 +1,13 @@
-// Importa as funções necessárias do Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-
-// Configurações do Firebase
+// Configuração do Firebase (corrigido storageBucket)
 const firebaseConfig = {
     apiKey: "AIzaSyDyt9n8CVoFCwt7m2vLrIHJfLR1GfNBD6g",
     authDomain: "eight-e6918.firebaseapp.com",
     projectId: "eight-e6918",
-    storageBucket: "eight-e6918.firebasestorage.app",
+    storageBucket: "eight-e6918.appspot.com", // Corrigido
     messagingSenderId: "472440707108",
     appId: "1:472440707108:web:70ac7b5bb437bb83a860b1",
     measurementId: "G-63BJ2GHBH1",
@@ -17,91 +15,56 @@ const firebaseConfig = {
 
 // Inicializa o Firebase
 const app = initializeApp(firebaseConfig);
-
-
-const provider = new GoogleAuthProvider();
+const auth = getAuth();
+auth.languageCode = 'pt-br'; // Corrigido
+const db = getFirestore();
 
 // Função para exibir mensagens temporárias na interface
 function showMessage(message, divId) {
-    var messageDiv = document.getElementById(divId);
+    const messageDiv = document.getElementById(divId);
     messageDiv.style.display = "block";
     messageDiv.innerHTML = message;
     messageDiv.style.opacity = 1;
-    setTimeout(function() {
+    setTimeout(() => {
         messageDiv.style.opacity = 0;
-    }, 5000); // A mensagem desaparece após 5 segundos
+    }, 5000);
 }
 
-// Lógica de cadastro de novos usuários
+// Cadastro de novos usuários
 const signUp = document.getElementById('submitSignUp');
-signUp.addEventListener('click', (event) => {
-    event.preventDefault(); // Previne o comportamento padrão do botão
-
-    // Captura os dados do formulário de cadastro
+signUp.addEventListener('click', async (event) => {
+    event.preventDefault();
     const email = document.getElementById('rEmail').value;
     const password = document.getElementById('rPassword').value;
     const firstName = document.getElementById('fName').value;
     const lastName = document.getElementById('lName').value;
 
-    const auth = getAuth(); // Configura o serviço de autenticação
-    auth.languagecode = 'pt-br';
-    const db = getFirestore(); // Conecta ao Firestore
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        await setDoc(doc(db, "users", user.uid), { email, firstName, lastName });
 
-    // Cria uma conta com e-mail e senha
-    createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-        const user = userCredential.user; // Usuário autenticado
-        const userData = { email, firstName, lastName }; // Dados do usuário para salvar
-
-        showMessage('Conta criada com sucesso', 'signUpMessage'); // Exibe mensagem de sucesso
-
-        // Salva os dados do usuário no Firestore
-        const docRef = doc(db, "users", user.uid);
-        setDoc(docRef, userData)
-        .then(() => {
-            window.location.href = 'index.html'; // Redireciona para a página de login após cadastro
-        })
-        .catch((error) => {
-            console.error("Error writing document", error);
-        });
-    })
-    .catch((error) => {
-        const errorCode = error.code;
-        if (errorCode == 'auth/email-already-in-use') {
-            showMessage('Endereço de email já existe', 'signUpMessage');
-        } else {
-            showMessage('não é possível criar usuário', 'signUpMessage');
-        }
-    });
+        showMessage('Conta criada com sucesso', 'signUpMessage');
+        window.location.href = 'index.html';
+    } catch (error) {
+        showMessage(error.code === 'auth/email-already-in-use' ? 'Endereço de email já existe' : 'Não foi possível criar usuário', 'signUpMessage');
+    }
 });
 
-// Lógica de login de usuários existentes
+// Login de usuários
 const signIn = document.getElementById('submitSignIn');
-signIn.addEventListener('click', (event) => {
-    event.preventDefault(); // Previne o comportamento padrão do botão
-
-    // Captura os dados do formulário de login
+signIn.addEventListener('click', async (event) => {
+    event.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    const auth = getAuth(); // Configura o serviço de autenticação
 
-    // Realiza o login com e-mail e senha
-    signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-        showMessage('usuário logado com sucesso', 'signInMessage'); // Exibe mensagem de sucesso
-        const user = userCredential.user;
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        localStorage.setItem('loggedInUserId', userCredential.user.uid);
 
-        // Salva o ID do usuário no localStorage
-        localStorage.setItem('loggedInUserId', user.uid);
-
-        window.location.href = 'homepage.html'; // Redireciona para a página inicial
-    })
-    .catch((error) => {
-        const errorCode = error.code;
-        if (errorCode === 'auth/invalid-credential') {
-            showMessage('Email ou Senha incorreta', 'signInMessage');
-        } else {
-            showMessage('Essa conta não existe', 'signInMessage');
-        }
-    });
+        showMessage('Usuário logado com sucesso', 'signInMessage');
+        window.location.href = 'homepage.html';
+    } catch (error) {
+        showMessage(error.code === 'auth/invalid-credential' ? 'Email ou Senha incorreta' : 'Essa conta não existe', 'signInMessage');
+    }
 });
